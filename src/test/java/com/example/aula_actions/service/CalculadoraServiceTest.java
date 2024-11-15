@@ -2,8 +2,10 @@ package com.example.aula_actions.service;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.web.server.ResponseStatusException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class CalculadoraServiceTest {
 
@@ -21,5 +23,23 @@ public class CalculadoraServiceTest {
 
         // Assert
         assertEquals(esperado, resultado);
+    }
+
+    @Test
+    @DisplayName("Quando acionado com 10 e 0, então deve retornar exceção")
+    public void testDividirPorZero() {
+        // Arrange
+        CalculadoraService calculadoraService = new CalculadoraService();
+        double num1 = 10;
+        double num2 = 0;
+        var expectedMessage = "400 BAD_REQUEST \"Não é possível dividir por zero\"";
+
+        // Assert
+        ResponseStatusException exception = assertThrows(
+                ResponseStatusException.class, () -> {
+                    // Act
+                    calculadoraService.dividir(num1, num2);
+                }
+        );
     }
 }
